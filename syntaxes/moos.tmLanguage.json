@@ -1,0 +1,297 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "MOOS",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#single_line_comments"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#antler_block"
+		},
+		{
+			"include": "#app_block"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.moos",
+					"match": "^\\s*\\b(Community|ServerHost|ServerPort|LatOrigin|LongOrigin|MOOSTimeWarp)\\b"
+				},
+				{
+					"name": "keyword.preprocessor.moos",
+					"match": "^#(include|ifdef|elseifdef|endif|else|define|ifndef)\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.moos",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.moos",
+					"match": "\\\\."
+				}
+			]
+		},
+		"single_line_comments": {
+			"name": "comment.single.line.moos",
+			"begin": "//",
+			"end": "$",
+			"patterns": [
+				{
+					"name": "constant.character.escape.moos",
+					"match": "\\\\."
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.moos",
+					"begin": "\\$\\(",
+					"end": "\\)",
+					"patterns": [
+						{
+							"name": "constant.character.escape.moos",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "support.function.moos",
+					"begin": "\\$\\{",
+					"end": "\\}",
+					"patterns": [
+						{
+							"name": "constant.character.escape.moos",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "variable.moos",
+					"begin": "\\$\\w*",
+					"end": "\\b",
+					"patterns": [
+						{
+							"name": "constant.character.escape.moos",
+							"match": "\\\\."
+						}
+					]
+				}
+			]
+		},
+		"antler_block": {
+			"begin": "^\\s*((?i)ProcessConfig)\\s*=\\s*((?i)ANTLER|pAntler)\\s*",
+			"end": "(?<=\\})",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.moos"
+				},
+				"2": {
+					"name": "constant.language.moos"
+				}
+			},
+			"patterns": [
+				{
+					"match": "^\\s*\\b(ExecutablePath)\\b\\s*=\\s*\\b((?i)system)\\b\\s*",
+					"captures": {
+						"1": {
+							"name": "keyword.control.moos"
+						},
+						"2": {
+							"name": "constant.language.moos"
+						}
+					}
+				},
+				{
+					"begin": "^\\s*\\b(Run)\\b\\s*=\\s*\\b(\\w*)\\b\\s*(\\@)\\s*",
+					"end": "$",
+					"captures": {
+						"1": {
+							"name": "keyword.control.moos"
+						},
+						"2": {
+							"name": "constant.language.moos"
+						},
+						"3": {
+							"name": "keyword.control.moos"
+						}
+					},
+					"patterns": [
+						{
+							"match": "\\s*(NewConsole|InhibitMOOSParams)\\s*=\\s*((?i)(true|false))\\s*",
+							"captures": {
+								"1": {
+									"name": "keyword.control.moos"
+								},
+								"2": {
+									"name": "constant.language.moos"
+								}
+							}
+						},
+						{
+							"match": "\\s*(NewConsole|InhibitMOOSParams)\\s*=\\s*(\\w+)\\s*",
+							"captures": {
+								"1": {
+									"name": "keyword.control.moos"
+								},
+								"2": {
+									"name": "invalid.illegal.moos"
+								}
+							}
+						},
+						{
+							"match": "\\s*(ExtraProcessParams|XConfig|Win32Config)\\s*=\\s*(\\w+)\\s*",
+							"captures": {
+								"1": {
+									"name": "keyword.control.moos"
+								},
+								"2": {
+									"name": "entity.name.type.moos"
+								}
+							}
+						},
+						{
+							"match": "\\s*(Path)\\s*=\\s*\\b((?i)system)\\b\\s*",
+							"captures": {
+								"1": {
+									"name": "keyword.control.moos"
+								},
+								"2": {
+									"name": "constant.language.moos"
+								}
+							}
+						},
+						{
+							"match": "\\s*(~)\\s*([\\w|\\-]+)([\\s,]+)(.*)(?=(\/\/.*))",
+							"captures": {
+								"1": {
+									"name": "keyword.control.moos"
+								},
+								"2": {
+									"name": "entity.name.type.moos"
+								},
+								"3": {
+									"name": "invalid.illegal.moos"
+								},
+								"4": {
+									"name": "invalid.illegal.moos"
+								}
+							}
+						},
+						{
+							"include": "#single_line_comments"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"name": "keyword.control.moos",
+							"match": "\\s*(NewConsole|InhibitMOOSParams|Path|ExtraProcessParams|XConfig|Win32Config)\\s*"
+						}
+					]
+				},
+				{
+					"name": "keyword.control.moos",
+					"match": "^\\s*\\b(Run|ExecutablePath|MSBetweenLaunches)\\b\\s*"
+				},
+				{
+					"include": "#single_line_comments"
+				},
+				{
+					"include": "#variables"
+				},
+				{
+					"begin": "\\G ?",
+					"end": "(?:\\{|<%|\\?\\?<|(?=;))|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.begin.bracket.curly.antler.moos"
+						}
+					},
+					"name": "meta.head.antler.moos",
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"begin": "(?<=\\{|<%|\\?\\?<)",
+					"end": "\\}|%>|\\?\\?>|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.end.bracket.curly.antler.moos"
+						}
+					}
+				}
+			]
+		},
+		"app_block": {
+			"begin": "^\\s*((?i)ProcessConfig)\\s*=\\s*(\\w*)\\s*",
+			"end": "(?<=\\})",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.moos"
+				},
+				"2": {
+					"name": "entity.name.type.moos"
+				}
+			},
+			"patterns": [
+				{
+					"name": "keyword.control.moos",
+					"match": "^\\s*\\b(AppTick|CommsTick)\\b\\s*"
+				},
+				{
+					"include": "#single_line_comments"
+				},
+				{
+					"include": "#variables"
+				},
+				{
+					"begin": "\\G ?",
+					"end": "(?:\\{|<%|\\?\\?<|(?=;))|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.begin.bracket.curly.app.moos"
+						}
+					},
+					"name": "meta.head.antler.moos",
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"begin": "(?<=\\{|<%|\\?\\?<)",
+					"end": "\\}|%>|\\?\\?>|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.end.bracket.curly.antler.moos"
+						}
+					}
+				}
+			]
+		}
+	},
+	"scopeName": "source.moos"
+}

@@ -1,0 +1,127 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "IvP Behavior",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#single_line_comments"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#invalid_variables"
+		},
+		{
+			"include": "#bhv_block"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.bhv",
+					"match": "^\\s*\\b(initialize|set)\\b"
+				},
+				{
+					"name": "keyword.preprocessor.bhv",
+					"match": "^#(include|ifdef|elseifdef|endif|else|define|ifndef)\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.bhv",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bhv",
+					"match": "\\\\."
+				}
+			]
+		},
+		"single_line_comments": {
+			"name": "comment.single.line.bhv",
+			"begin": "//",
+			"end": "$",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bhv",
+					"match": "\\\\."
+				}
+			]
+		},
+		"variables": {
+			"name": "variable.bhv",
+			"begin": "\\$\\(",
+			"end": "\\)",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bhv",
+					"match": "\\\\."
+				}
+			]
+		},
+		"invalid_variables": {
+			"name": "invalid.illegal.bhv",
+			"begin": "\\$\\{",
+			"end": "\\}",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bhv",
+					"match": "\\\\."
+				}
+			]
+		},
+		"bhv_block": {
+			"begin": "^\\s*(Behavior)\\s*=\\s*(\\w*)\\s*",
+			"end": "(?<=\\})",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.bhv"
+				},
+				"2": {
+					"name": "entity.name.type.bhv"
+				}
+			},
+			"patterns": [
+				{
+					"name": "keyword.control.bhv",
+					"match": "^\\s*\\b(name|pwt|condition|updates|runflag|endflag|inactiveflag|activeflag|idleflag|perpetual|duration_status|duration_reset|duration|duration_idle_decay|templating)\\b\\s*"
+				},
+				{
+					"begin": "\\G ?",
+					"end": "(?:\\{|<%|\\?\\?<|(?=;))|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.begin.bracket.curly.behavior.bhv"
+						}
+					},
+					"name": "meta.head.behavior.bhv",
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"begin": "(?<=\\{|<%|\\?\\?<)",
+					"end": "\\}|%>|\\?\\?>|(?=(?<!\\\\)\n)\\s*",
+					"beginCaptures": {},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.block.end.bracket.curly.behavior.bhv"
+						}
+					}
+				}
+			]
+		}
+	},
+	"scopeName": "source.bhv"
+}

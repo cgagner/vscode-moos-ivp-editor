@@ -1,0 +1,52 @@
+{
+    "name": "moos-ivp-editor",
+    "displayName": "MOOS-IvP Editor",
+    "description": "Syntax highlighting for MOOS-IvP configuration files.",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.32.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "moos",
+                "aliases": [
+                    "MOOS",
+                    "moos"
+                ],
+                "extensions": [
+                    ".moos",
+                    ".plug",
+                    ".meta"
+                ],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "ivp-behavior",
+                "aliases": [
+                    "IvP Behavior",
+                    "ivp-behavior"
+                ],
+                "extensions": [
+                    ".bhv"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "moos",
+                "scopeName": "source.moos",
+                "path": "./syntaxes/moos.tmLanguage.json"
+            },
+            {
+                "language": "ivp-behavior",
+                "scopeName": "source.bhv",
+                "path": "./syntaxes/bhv.tmLanguage.json"
+            }
+        ]
+    }
+}
