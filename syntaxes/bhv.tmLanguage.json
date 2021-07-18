@@ -107,6 +107,12 @@
 					"match": "^\\s*\\b(name|pwt|condition|updates|runflag|endflag|inactiveflag|activeflag|idleflag|perpetual|duration_status|duration_reset|duration|duration_idle_decay|templating)\\b\\s*"
 				},
 				{
+					"include": "#single_line_comments"
+				},
+				{
+					"include": "#variables"
+				},
+				{
 					"begin": "\\G ?",
 					"end": "(?:\\{|<%|\\?\\?<|(?=;))|(?=(?<!\\\\)\n)\\s*",
 					"beginCaptures": {},

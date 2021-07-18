@@ -51,6 +51,14 @@ added.
   * Need to add the ability to add options specific to individual applications
 * Behavior Syntax:
   * Need to add the ability to add options specific to individual applications
+  * Add the ability to handle `initialize_`
+  * Add support for built-in macros `uTimerScript`:
+	* `$[DBTIME]`, `$[UTCTIME]`, `$[COUNT]`, `$[TCOUNT]` and `$[IDX]`
+	* Add support for arithmetic
+	* `$[RAND_VAL]`
+	* `randvar = varname=ANG, min=0, max=359, key=at_reset`
+* License: change to MIT before releaeing
+
 
 
 ## Release Notes

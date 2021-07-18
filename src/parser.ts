@@ -3,6 +3,20 @@ import * as path from 'path';
 
 const fs = require('fs')
 
+// TODO:
+// * Parser class
+// * Handler interface
+// * Cache class
+// 
+
+class Node {
+    
+}
+
+interface Parser {
+    parse(document: vscode.TextDocument) : Node;
+}
+
 enum MacroMode {
     Top,
     IfDefFailed,

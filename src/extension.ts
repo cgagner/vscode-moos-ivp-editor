@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { subscribeToDocumentChanges } from './diagnostics';
-import {MoosDocument} from './parser'
+import { MoosDocument } from './parser'
 
 class MoosHoverProvider implements vscode.HoverProvider {
 	provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
@@ -85,20 +85,13 @@ class MoosDefinitionProvider implements vscode.DefinitionProvider {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "moos-ivp-editor2" is now active!');
+	//const tokenTypes = ['class', 'interface', 'enum', 'function', 'variable'];
+	//const tokenModifiers = ['declaration', 'documentation'];
+	//const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
+	//const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('moos-ivp-editor2.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from moos-ivp-editor2!');
-	});
+	
 
-	context.subscriptions.push(disposable);
 
 	const diag = vscode.languages.createDiagnosticCollection("moos");
 	context.subscriptions.push(diag);

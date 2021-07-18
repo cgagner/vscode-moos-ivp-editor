@@ -3,9 +3,11 @@
     "displayName": "MOOS-IvP Editor",
     "publishercd ": "cgagner",
     "description": "Syntax highlighting for MOOS-IvP configuration files.",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "license": "MIT",
-    "repository": {"url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"},
+    "repository": {
+        "url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"
+    },
     "engines": {
         "vscode": "^1.32.0"
     },
