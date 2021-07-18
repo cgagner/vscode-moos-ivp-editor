@@ -15,9 +15,6 @@
 			"include": "#variables"
 		},
 		{
-			"include": "#invalid_variables"
-		},
-		{
 			"include": "#bhv_block"
 		}
 	],
@@ -57,24 +54,39 @@
 			]
 		},
 		"variables": {
-			"name": "variable.bhv",
-			"begin": "\\$\\(",
-			"end": "\\)",
 			"patterns": [
 				{
-					"name": "constant.character.escape.bhv",
-					"match": "\\\\."
-				}
-			]
-		},
-		"invalid_variables": {
-			"name": "invalid.illegal.bhv",
-			"begin": "\\$\\{",
-			"end": "\\}",
-			"patterns": [
+					"name": "variable.bhv",
+					"begin": "[\\$|%]\\(",
+					"end": "\\)",
+					"patterns": [
+						{
+							"name": "constant.character.escape.bhv",
+							"match": "\\\\."
+						}
+					]
+				},
 				{
-					"name": "constant.character.escape.bhv",
-					"match": "\\\\."
+					"name": "support.function.bhv",
+					"begin": "\\$\\{",
+					"end": "\\}",
+					"patterns": [
+						{
+							"name": "constant.character.escape.bhv",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "invalid.illegal.bhv",
+					"begin": "\\$[^\\s\\{\\(]+",
+					"end": "[\\s|$]",
+					"patterns": [
+						{
+							"name": "constant.character.escape.bhv",
+							"match": "\\\\."
+						}
+					]
 				}
 			]
 		},

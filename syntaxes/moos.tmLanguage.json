@@ -60,7 +60,7 @@
 			"patterns": [
 				{
 					"name": "variable.moos",
-					"begin": "\\$\\(",
+					"begin": "[\\$|%]\\(",
 					"end": "\\)",
 					"patterns": [
 						{
@@ -81,9 +81,9 @@
 					]
 				},
 				{
-					"name": "variable.moos",
-					"begin": "\\$\\w*",
-					"end": "\\b",
+					"name": "invalid.illegal.moos",
+					"begin": "\\$[^\\s\\{\\(]+",
+					"end": "[\\s|$]",
 					"patterns": [
 						{
 							"name": "constant.character.escape.moos",

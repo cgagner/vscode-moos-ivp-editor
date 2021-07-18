@@ -1,7 +1,7 @@
 {
     "name": "moos-ivp-editor",
     "displayName": "MOOS-IvP Editor",
-    "publisher": "cgagner",
+    "publishercd ": "cgagner",
     "description": "Syntax highlighting for MOOS-IvP configuration files.",
     "version": "0.0.2",
     "license": "MIT",
@@ -12,7 +12,22 @@
     "categories": [
         "Programming Languages"
     ],
+    "activationEvents": [
+        "workspaceContains:**/*.moos",
+        "workspaceContains:**/*.bhv",
+        "workspaceContains:**/*.plug",
+        "onLanguage:moos",
+        "onLanguage:ivp-behavior",
+        "onCommand:moos-ivp-editor2.helloWorld"
+    ],
+    "main": "./dist/extension.js",
     "contributes": {
+        "commands": [
+            {
+                "command": "moos-ivp-editor2.helloWorld",
+                "title": "Hello World"
+            }
+        ],
         "languages": [
             {
                 "id": "moos",
@@ -51,5 +66,32 @@
                 "path": "./syntaxes/bhv.tmLanguage.json"
             }
         ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "test-compile": "tsc -p ./",
+        "test-watch": "tsc -watch -p ./",
+        "pretest": "npm run test-compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.32.0",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "14.x",
+        "eslint": "^7.27.0",
+        "@typescript-eslint/eslint-plugin": "^4.26.0",
+        "@typescript-eslint/parser": "^4.26.0",
+        "glob": "^7.1.7",
+        "mocha": "^8.4.0",
+        "typescript": "^4.3.2",
+        "vscode-test": "^1.5.2",
+        "ts-loader": "^9.2.2",
+        "webpack": "^5.38.1",
+        "webpack-cli": "^4.7.0"
     }
 }
