@@ -80,7 +80,7 @@ export class MoosDocument {
 
     constructor(filePath: string) {
         this.scanTime = 0;
-
+        // TODO: Switch to using vscode.workspace.fs
         if (fs.existsSync(filePath)) {
             console.log('File Path: ' + filePath);
             let stats = fs.statSync(filePath);
@@ -187,30 +187,25 @@ export class MoosDocument {
             name = name.substring(1, name.length - 1);
         }
 
-        let includePath = path.join(documentDir, name);
-
-        let paths = vscode.workspace.getConfiguration().get("moos-ivp.includePaths", []);
-        paths.unshift(documentDir);
-
+        let paths: string[] = vscode.workspace.getConfiguration().get("moos-ivp.includePath", []);
         
-        for (const path of paths) {
-            console.log("Include path: " + path);
-            
+        
+        paths.unshift(documentDir);
+        for (const dir of paths) {
+            const includePath = path.join(dir, name);
+            console.log('File Path: ' + includePath);
+            try {
+              // TODO: Switch to using vscode.workspace.fs
+              if (fs.existsSync(includePath)) {
+                  console.log('File Path: ' + includePath);
+                  let stats = fs.statSync(includePath);
+                  console.log('Modified time: ' + stats.mtime);
+                  return vscode.Uri.file(includePath);
+              }
+          } catch (err) {
+              return undefined;
+          }
         }
-
-        // TODO: Search the wordspace and the include path specified in the settings
-
-        try {
-            if (fs.existsSync(includePath)) {
-                console.log('File Path: ' + includePath);
-                let stats = fs.statSync(includePath);
-                console.log('Modified time: ' + stats.mtime);
-                return vscode.Uri.file(includePath);
-            }
-        } catch (err) {
-            return undefined;
-        }
-
         return undefined;
     }
 
