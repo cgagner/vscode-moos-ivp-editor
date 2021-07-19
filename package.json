@@ -24,10 +24,16 @@
     ],
     "main": "./dist/extension.js",
     "contributes": {
-        "commands": [
+        "configuration":[
             {
-                "command": "moos-ivp-editor2.helloWorld",
-                "title": "Hello World"
+                "title": "MOOS-IvP",
+                "properties": {
+                    "moos-ivp.includePaths": {
+                        "type": "array",
+                        "default": [],
+                        "description": "Specifies a list of directories to look for include files when evaluating a mission file if the include file is not found in the current directory."
+                    }
+                }
             }
         ],
         "languages": [

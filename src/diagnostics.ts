@@ -13,14 +13,14 @@ const EMOJI = 'moos';
  * @param doc text document to analyze
  * @param moosDiagnostics diagnostic collection
  */
-export function refreshDiagnostics(doc: vscode.TextDocument, moosDiagnostics: vscode.DiagnosticCollection): void {
+export async function refreshDiagnostics(doc: vscode.TextDocument, moosDiagnostics: vscode.DiagnosticCollection): Promise<void> {
     const diagnostics: vscode.Diagnostic[] = [];
 
     for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
         const lineOfText = doc.lineAt(lineIndex);
 
         if (lineOfText.text.startsWith("#include", lineOfText.firstNonWhitespaceCharacterIndex)) {
-            let diag = createDiagnostic(doc, lineOfText, lineIndex);
+            let diag = await createDiagnostic(doc, lineOfText, lineIndex);
             if (diag) {
                 diagnostics.push(diag);
             }
@@ -35,7 +35,7 @@ export function refreshDiagnostics(doc: vscode.TextDocument, moosDiagnostics: vs
     moosDiagnostics.set(doc.uri, diagnostics);
 }
 
-function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number): vscode.Diagnostic | null {
+async function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number): Promise<vscode.Diagnostic | null> {
     const commentIndex = MoosDocument.getCommentIndex(lineOfText.text);
     const containsComment = commentIndex >= 0;
     const endIndex = containsComment ? commentIndex : lineOfText.text.length;

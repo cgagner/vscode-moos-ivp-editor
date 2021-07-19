@@ -189,6 +189,15 @@ export class MoosDocument {
 
         let includePath = path.join(documentDir, name);
 
+        let paths = vscode.workspace.getConfiguration().get("moos-ivp.includePaths", []);
+        paths.unshift(documentDir);
+
+        
+        for (const path of paths) {
+            console.log("Include path: " + path);
+            
+        }
+
         // TODO: Search the wordspace and the include path specified in the settings
 
         try {
