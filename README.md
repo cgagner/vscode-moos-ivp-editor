@@ -57,8 +57,6 @@ added.
 	* Add support for arithmetic
 	* `$[RAND_VAL]`
 	* `randvar = varname=ANG, min=0, max=359, key=at_reset`
-* License: change to MIT before releaeing
-
 
 
 ## Release Notes
