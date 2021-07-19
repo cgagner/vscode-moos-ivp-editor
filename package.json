@@ -9,7 +9,7 @@
         "url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"
     },
     "engines": {
-        "vscode": "^1.32.0"
+        "vscode": "^1.57.0"
     },
     "categories": [
         "Programming Languages"
@@ -30,13 +30,13 @@
                 "properties": {
                     "moos-ivp.includePath": {
                         "type": [
-                          "array",
-                          "null"
+                            "array",
+                            "null"
                         ],
                         "default": [],
                         "description": "Specifies a list of directories to look for include files when evaluating a mission file if the include file is not found in the current directory.",
                         "items": {
-                          "type": "string"
+                            "type": "string"
                         }
                     }
                 }
