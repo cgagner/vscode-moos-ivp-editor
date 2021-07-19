@@ -3,23 +3,23 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { subscribeToDocumentChanges } from './diagnostics';
-import { MoosDocument } from './parser'
+import { MoosDocument } from './parser';
 
 class MoosHoverProvider implements vscode.HoverProvider {
 	provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
-		let target_word = MoosDocument.getWordAt(document, position);
-		if (!target_word) {
+		let targetWord = MoosDocument.getWordAt(document, position);
+		if (!targetWord) {
 			return null;
 		}
 
-		if (target_word.startsWith("${")) {
+		if (targetWord.startsWith("${")) {
 			// Environment variable
-			if (target_word.endsWith("}")) {
-				let env_str = target_word.substring(2, target_word.length - 1);
-				if (env_str) {
-					let env_var = process.env[env_str];
-					if (env_var) {
-						return new vscode.Hover('```' + env_str + '=' + env_var + '```');
+			if (targetWord.endsWith("}")) {
+				let envStr = targetWord.substring(2, targetWord.length - 1);
+				if (envStr) {
+					let envVar = process.env[envStr];
+					if (envVar) {
+						return new vscode.Hover('```' + envStr + '=' + envVar + '```');
 					}
 				}
 			}
@@ -33,14 +33,14 @@ class MoosHoverProvider implements vscode.HoverProvider {
 class MoosDefinitionProvider implements vscode.DefinitionProvider {
 
 	provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Definition | vscode.LocationLink[]> {
-		let target_word = MoosDocument.getWordAt(document, position);
+		let targetWord = MoosDocument.getWordAt(document, position);
 
-		if (!target_word) {
+		if (!targetWord) {
 			return null;
 		}
 
 		// Ignore environment variables - These are defined outside of the MOOS scope
-		if (target_word.startsWith("${")) {
+		if (targetWord.startsWith("${")) {
 			return null;
 		}
 
@@ -50,30 +50,23 @@ class MoosDefinitionProvider implements vscode.DefinitionProvider {
 			let regEx = new RegExp("\\s+");
 			let words = line.text.split(regEx);
 
-			if (words.length <= 1 || words[1] != target_word) {
+			if (words.length <= 1 || words[1] !== targetWord) {
 				return null;
 			}
 
-			let file_uri = MoosDocument.getIncludeUri(document, target_word);
-			if (file_uri) {
-				return new vscode.Location(file_uri, new vscode.Position(0, 0));
+			let fileUri = MoosDocument.getIncludeUri(document, targetWord);
+			if (fileUri) {
+				return new vscode.Location(fileUri, new vscode.Position(0, 0));
 			}
 		}
 
-		// Check for Variables that start with $
-		if (target_word.startsWith("$", line.firstNonWhitespaceCharacterIndex)) {
-			// Look for variables 
-			let matches = target_word.match(new RegExp("^\\$(?<define>\\([^\\)]+\\)|\\w+)$"));
-			if (matches?.groups) {
-				let variable = matches.groups["define"];
-				if (variable) {
-					if (variable.startsWith('(') && variable.endsWith(')')) {
-						variable = variable.substring(1, variable.length - 1);
-					}
-					console.log("Looking for variable: " + variable);
-					return MoosDocument.getDefineLocation(variable, document, position);
-				}
-				return null;
+		// Look for variables 
+		const matches = targetWord.match(new RegExp("^[\\$|%]\\((?<define>[^\\)]+)\\)$"));
+		if (matches && matches.groups) {
+			const variable = matches.groups["define"];
+			if (variable) {
+				console.log("Looking for variable: " + variable);
+				return MoosDocument.getDefineLocation(variable, document, position);
 			}
 		}
 
@@ -89,9 +82,6 @@ export function activate(context: vscode.ExtensionContext) {
 	//const tokenModifiers = ['declaration', 'documentation'];
 	//const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
 	//const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
-
-	
-
 
 	const diag = vscode.languages.createDiagnosticCollection("moos");
 	context.subscriptions.push(diag);

@@ -51,7 +51,6 @@ added.
   * Need to add the ability to add options specific to individual applications
 * Behavior Syntax:
   * Need to add the ability to add options specific to individual applications
-  * Add the ability to handle `initialize_`
   * Add support for built-in macros `uTimerScript`:
 	* `$[DBTIME]`, `$[UTCTIME]`, `$[COUNT]`, `$[TCOUNT]` and `$[IDX]`
 	* Add support for arithmetic

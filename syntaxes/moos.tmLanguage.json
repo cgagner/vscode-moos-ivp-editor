@@ -30,7 +30,7 @@
 				},
 				{
 					"name": "keyword.preprocessor.moos",
-					"match": "^#(include|ifdef|elseifdef|endif|else|define|ifndef)\\b"
+					"match": "^\\s*#(include|ifdef|elseifdef|endif|else|define|ifndef)\\s+"
 				}
 			]
 		},
@@ -215,6 +215,9 @@
 					"include": "#variables"
 				},
 				{
+					"include": "#keywords"
+				},
+				{
 					"begin": "\\G ?",
 					"end": "(?:\\{|<%|\\?\\?<|(?=;))|(?=(?<!\\\\)\n)\\s*",
 					"beginCaptures": {},
@@ -263,6 +266,9 @@
 				},
 				{
 					"include": "#variables"
+				},
+				{
+					"include": "#keywords"
 				},
 				{
 					"begin": "\\G ?",

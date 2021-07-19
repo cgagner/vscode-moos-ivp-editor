@@ -23,11 +23,11 @@
 			"patterns": [
 				{
 					"name": "keyword.control.bhv",
-					"match": "^\\s*\\b(initialize|set)\\b"
+					"match": "^\\s*\\b((?i)initialize|initialize_|set)\\b"
 				},
 				{
 					"name": "keyword.preprocessor.bhv",
-					"match": "^#(include|ifdef|elseifdef|endif|else|define|ifndef)\\b"
+					"match": "^\\s*#(include|ifdef|elseifdef|endif|else|define|ifndef)\\s+"
 				}
 			]
 		},
@@ -91,7 +91,7 @@
 			]
 		},
 		"bhv_block": {
-			"begin": "^\\s*(Behavior)\\s*=\\s*(\\w*)\\s*",
+			"begin": "^\\s*((?i)Behavior)\\s*=\\s*(\\w*)\\s*",
 			"end": "(?<=\\})",
 			"beginCaptures": {
 				"1": {
@@ -111,6 +111,9 @@
 				},
 				{
 					"include": "#variables"
+				},
+				{
+					"include": "#keywords"
 				},
 				{
 					"begin": "\\G ?",
