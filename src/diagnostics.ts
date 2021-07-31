@@ -4,12 +4,10 @@ import { MoosDocument } from './parser';
 /** Code that is used to associate diagnostic entries with code actions. */
 export const MOOS_MENTION = 'MOOS';
 
-/** String to detect in the text document. */
-const EMOJI = 'moos';
 
 /**
  * Analyzes the text document for problems. 
- * This demo diagnostic problem provider finds all mentions of 'emoji'.
+ *
  * @param doc text document to analyze
  * @param moosDiagnostics diagnostic collection
  */
@@ -18,6 +16,21 @@ export async function refreshDiagnostics(doc: vscode.TextDocument, moosDiagnosti
 
     for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
         const lineOfText = doc.lineAt(lineIndex);
+        const line = MoosDocument.removeComments(lineOfText.text);
+        let matches = line.matchAll(new RegExp("\\${(?<envStr>[^}]*)}", "g"));
+        for (const match of matches) {
+            if (match && match.groups && match.groups["envStr"]) {
+                const envStr = match.groups["envStr"];
+                if (envStr) {
+                    let envVar = process.env[envStr];
+                    if (!envVar) {
+                        const start = match.index;
+                        const range = new vscode.Range(lineIndex, start, lineIndex, start + envStr.length+3);
+                        diagnostics.push(new vscode.Diagnostic(range, "Undefined Environemnt Variable", vscode.DiagnosticSeverity.Error))
+                    }
+                }
+            }
+        }
 
         if (lineOfText.text.startsWith("#include", lineOfText.firstNonWhitespaceCharacterIndex)) {
             let diag = await createDiagnostic(doc, lineOfText, lineIndex);
@@ -69,7 +82,7 @@ async function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.Tex
             vscode.DiagnosticSeverity.Error);
 
         diagnostic.code = MOOS_MENTION;
-        
+
         // NOTE: This is what we need to do for code that is ignored by ifdef
         // diagnostic.tags = [vscode.DiagnosticTag.Unnecessary];
         return diagnostic;

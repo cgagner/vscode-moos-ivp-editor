@@ -60,6 +60,7 @@ class MoosDefinitionProvider implements vscode.DefinitionProvider {
 			}
 		}
 
+		
 		// Look for variables 
 		const matches = targetWord.match(new RegExp("^[\\$|%]\\((?<define>[^\\)]+)\\)$"));
 		if (matches && matches.groups) {

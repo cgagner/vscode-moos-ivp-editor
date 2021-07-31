@@ -222,13 +222,11 @@ export class MoosDocument {
             return undefined;
         }
 
-        let endLine = (position ? position.line : document.lineCount);
-
         if (!variables) {
             variables = new Map<string, vscode.Location>();
         }
 
-
+        const endLine = (position ? position.line : document.lineCount);
         const lineCount = document.lineCount;
         for (let i = 0; i < endLine; ++i) {
             let line = document.lineAt(i);
