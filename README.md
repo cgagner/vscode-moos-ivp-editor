@@ -42,7 +42,7 @@ or robot.
 ## Extension Settings
 
 This extension currently doesn't have any settings. However, that is expected
-to change in the furture. This section will be updated when settings have been
+to change in the future. This section will be updated when settings have been
 added.
 
 ## Known Issues
@@ -63,6 +63,33 @@ added.
 ### 0.0.1
 
 Initial release of the moos-ivp-editor extension for VS Code.
+
+## Extension Details 
+
+### Extension File Structure
+
+```
+.
+├── .vscode
+│   ├── launch.json     // Config for launching and debugging the extension
+│   └── tasks.json      // Config for build task that compiles TypeScript
+├── .gitignore          // Ignore build output and node_modules
+├── README.md           // This file
+├── client              // LSP client portion of the extension
+│   └── src
+│       └── extension.ts // Client extension source code
+├── package.json        // Extension manifest
+├── tsconfig.json       // TypeScript configuration
+```
+
+### Building Extension
+
+
+#### Notes:
+
+```bash
+cargo install wasm-pack
+```
 
 ## For more information
 

@@ -3,7 +3,7 @@
     "displayName": "MOOS-IvP Editor",
     "publisher": "cgagner",
     "description": "Syntax highlighting for MOOS-IvP configuration files.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license": "MIT",
     "repository": {
         "url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"
@@ -20,10 +20,16 @@
         "workspaceContains:**/*.plug",
         "onLanguage:moos",
         "onLanguage:ivp-behavior",
-        "onCommand:moos-ivp-editor2.helloWorld"
+        "onCommand:client.helloWorld"
     ],
     "main": "./dist/extension.js",
     "contributes": {
+        "commands" : [
+            {
+                "command": "client.helloWorld",
+                "title": "Hello World"
+            }
+        ],
         "configuration": [
             {
                 "title": "MOOS-IvP",
@@ -84,14 +90,10 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run package",
-        "compile": "webpack",
-        "watch": "webpack --watch",
+        "compile": "webpack --mode development",
+        "watch": "webpack --mode development --watch",
         "package": "webpack --mode production --devtool hidden-source-map",
-        "test-compile": "tsc -p ./",
-        "test-watch": "tsc -watch -p ./",
-        "pretest": "npm run test-compile && npm run lint",
-        "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
+        "lint": "eslint src --ext ts" 
     },
     "devDependencies": {
         "@types/vscode": "^1.52.0",
