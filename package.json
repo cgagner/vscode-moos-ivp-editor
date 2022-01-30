@@ -22,9 +22,9 @@
         "onLanguage:ivp-behavior",
         "onCommand:client.helloWorld"
     ],
-    "main": "./dist/extension.js",
+    "main": "./dist/client/client.js",
     "contributes": {
-        "commands" : [
+        "commands": [
             {
                 "command": "client.helloWorld",
                 "title": "Hello World"
@@ -89,26 +89,30 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run package",
-        "compile": "webpack --mode development",
-        "watch": "webpack --mode development --watch",
-        "package": "webpack --mode production --devtool hidden-source-map",
-        "lint": "eslint src --ext ts" 
+        "vscode:prepublish": "npm run compile",
+        "package": "vsce package --no-yarn",
+        "compile": "tsc -b",
+        "watch": "tsc -b -w",
+        "lint": "eslint src --ext ts",
+        "postinstall": "npm install ./server; npm install ./client"
     },
     "devDependencies": {
-        "@types/vscode": "^1.52.0",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.2",
         "@types/node": "14.x",
-        "eslint": "^7.27.0",
+        "@types/vscode": "^1.52.0",
         "@typescript-eslint/eslint-plugin": "^4.26.0",
         "@typescript-eslint/parser": "^4.26.0",
+        "eslint": "^7.27.0",
         "glob": "^7.1.7",
         "mocha": "^8.4.0",
-        "typescript": "^4.3.2",
-        "vscode-test": "^1.5.2",
         "ts-loader": "^9.2.2",
-        "webpack": "^5.38.1",
-        "webpack-cli": "^4.7.0"
+        "typescript": "^4.3.2",
+        "vsce": "^2.5.3",
+        "vscode-test": "^1.5.2"
+    },
+    "dependencies": {
+        "vscode-moos-ivp-client": "file:client",
+        "vscode-moos-ivp-server": "file:server"
     }
 }
