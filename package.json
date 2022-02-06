@@ -18,11 +18,23 @@
         "workspaceContains:**/*.moos",
         "workspaceContains:**/*.bhv",
         "workspaceContains:**/*.plug",
+        "workspaceContains:**/*.def",
+        "workspaceContains:**/*.meta",
         "onLanguage:moos",
         "onLanguage:ivp-behavior",
         "onCommand:client.helloWorld"
     ],
     "main": "./dist/client/client.js",
+    "moos.trace.server": {
+        "scope": "window",
+        "type": "string",
+        "enum": [
+            "off",
+            "messages",
+            "verbose"
+        ],
+        "default": "verbose"
+    },
     "contributes": {
         "commands": [
             {
