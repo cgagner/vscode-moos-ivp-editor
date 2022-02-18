@@ -32,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// context.subscriptions.push(disposable);
 
+	let folders = vscode.workspace.workspaceFolders || [];
 
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(
@@ -53,7 +54,11 @@ export function activate(context: vscode.ExtensionContext) {
 	};
 
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: [{ scheme: 'file', language: 'plaintext' }],
+		documentSelector: [
+			{ scheme: 'file', language: 'moos' },
+			{ scheme: 'file', language: 'ivp-behavior' }
+		],
+		// workspaceFolder: folder,
 		synchronize: {
 			fileEvents: [
 				vscode.workspace.createFileSystemWatcher('**/.moos'),

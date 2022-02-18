@@ -25,16 +25,6 @@
         "onCommand:client.helloWorld"
     ],
     "main": "./dist/client/client.js",
-    "moos.trace.server": {
-        "scope": "window",
-        "type": "string",
-        "enum": [
-            "off",
-            "messages",
-            "verbose"
-        ],
-        "default": "verbose"
-    },
     "contributes": {
         "commands": [
             {
@@ -103,7 +93,7 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "package": "vsce package --no-yarn",
-        "compile": "tsc -b",
+        "compile": "(cd ext/moos-language-server && wasm-pack build --target nodejs) && tsc -b",
         "watch": "tsc -b -w",
         "lint": "eslint src --ext ts",
         "postinstall": "npm install ./server; npm install ./client"

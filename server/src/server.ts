@@ -5,20 +5,32 @@ import {
 	DiagnosticSeverity,
 	ProposedFeatures,
 	InitializeParams,
+	PublishDiagnosticsParams,
 	DidChangeConfigurationNotification,
 	CompletionItem,
 	CompletionItemKind,
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
+	TextDocumentContentChangeEvent,
 	InitializeResult
 } from 'vscode-languageserver/node';
 
 import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
+import { Range } from 'vscode';
+
+import { MoosLanguageServer } from '../../ext/moos-language-server/pkg';
 
 // Connection to the client
 const connection = createConnection(ProposedFeatures.all);
+
+const sendDiagnosticsCallback = (params: PublishDiagnosticsParams) =>
+	connection.sendDiagnostics(params);
+
+
+const languageServer = new MoosLanguageServer(sendDiagnosticsCallback);
+connection.onNotification((...args) => languageServer.onNotification(...args));
 
 // Document
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
@@ -91,7 +103,34 @@ connection.onInitialized(() => {
 // });
 
 
-//documents.listen(connection);
-connection.console.error('Starting listening');
+// connection.onDidChangeTextDocument(change => {
+// 	change.contentChanges.forEach(c => {
+// 		if (TextDocumentContentChangeEvent.isIncremental(c)) {
+// 			connection.console.log('Partial changes: "' + c.text + '"');
+// 			connection.console.log('Range: ' + c.range.start.line + ':' + c.range.start.character
+// 				+ '-' + c.range.end.line + ':' + c.range.end.character);
+// 		} else {
+// 			connection.console.log('Full changes: ' + c.text);
+// 		}
+// 	});
+// });
+
+// documents.onDidClose(event => {
+// 	connection.console.log('Closed file: ' + event.document.uri
+// 		+ ' | language: ' + event.document.languageId);
+
+// });
+
+// documents.onDidOpen(event => {
+// 	connection.console.log('Opened file: ' + event.document.uri
+// 		+ ' | language: ' + event.document.languageId);
+// });
+
+// documents.onDidChangeContent((change) => {
+// 	connection.console.log('Received change: ' + change.document.uri);
+// });
+
+// documents.listen(connection);
+connection.console.log('Starting listening');
 console.log('Starting listening');
 connection.listen();
