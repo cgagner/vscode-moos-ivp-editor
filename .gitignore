@@ -1,5 +1,4 @@
 /dist
-/ext
 /out
 /node_modules
 .vscode-test/
