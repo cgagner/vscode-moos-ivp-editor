@@ -59,6 +59,7 @@
                 ],
                 "extensions": [
                     ".moos",
+                    ".moos++",
                     ".plug",
                     ".meta",
                     ".def"
@@ -72,7 +73,8 @@
                     "ivp-behavior"
                 ],
                 "extensions": [
-                    ".bhv"
+                    ".bhv",
+                    ".bhv++"
                 ],
                 "configuration": "./language-configuration.json"
             }
@@ -89,6 +91,11 @@
                 "path": "./syntaxes/bhv.tmLanguage.json"
             }
         ]
+    },
+    "configurationDefaults": {
+        "moos": {
+            "editor.semanticHighlighting.enabled": true
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

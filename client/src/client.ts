@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as path from 'path';
 
@@ -10,92 +8,169 @@ import {
 	TransportKind
 } from 'vscode-languageclient/node';
 
-let client: LanguageClient;
+const moosFileExtensionPatterns = [
+	'**/*.moos',
+	'**/*.bhv',
+	'**/*.moos++',
+	'**/*.bhv++',
+	'**/*.meta',
+	'**/*.def',
+	'**/*.plug'
+];
 
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+// Default client handles MOOS files that are opened without a workspace
+let defaultClient: LanguageClient;
+// Clients are opened for each workspace folder
+let clients = new Map<string, LanguageClient>();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "client" is now active!');
+let _sortedWorkspaces: string[] | undefined;
+function sortedWorkspaces(): string[] {
+	if (_sortedWorkspaces === void 0) {
+		_sortedWorkspaces = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.map(folder => {
+			let result = folder.uri.toString();
+			if (result.charAt(result.length - 1) !== '/') {
+				result += '/';
+			}
+			return result;
+		}).sort(
+			(a, b) => {
+				return a.localeCompare(b);
+			}
+		) : [];
+	}
+	return _sortedWorkspaces;
+}
+vscode.workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaces = undefined);
 
-	// // The command has been defined in the package.json file
-	// // Now provide the implementation of the command with registerCommand
-	// // The commandId parameter must match the command field in package.json
-	// let disposable = vscode.commands.registerCommand('client.helloWorld', () => {
-	// 	// The code you place here will be executed every time your command is executed
-	// 	// Display a message box to the user
-	// 	vscode.window.showInformationMessage('Client LSP Running!');
-	// });
+async function openMoosFilesInWorkspaceFolder(folder: vscode.WorkspaceFolder) {
 
-	// context.subscriptions.push(disposable);
+	let uris: vscode.Uri[] = [];
+	for (const pattern of moosFileExtensionPatterns) {
+		let u = await vscode.workspace.findFiles(new vscode.RelativePattern(folder, pattern));
+		// console.log('Scanning files: ' + pattern + ' ' + u.join('\n\t'));
+		uris = uris.concat(u);
+	}
+	console.log('Scanning files: ' + uris.length);
+	//return Promise.all(uris.map(openDocument));
+}
 
-	let folders = vscode.workspace.workspaceFolders || [];
+async function openDocument(uri: vscode.Uri) {
+	const uriMatch = (d: vscode.TextDocument) => d.uri.toString() === uri.toString();
+	const doc = vscode.workspace.textDocuments.find(uriMatch);
+	if (doc === undefined) { await vscode.workspace.openTextDocument(uri); }
+}
 
-	// The server is implemented in node
+function getTopWorkspace(folder: vscode.WorkspaceFolder): vscode.WorkspaceFolder {
+	const sorted = sortedWorkspaces();
+	for (const element of sorted) {
+		let uri = folder.uri.toString();
+		if (uri.charAt(uri.length - 1) !== '/') {
+			uri += '/';
+		}
+		if (uri.startsWith(element)) {
+			return vscode.workspace.getWorkspaceFolder(vscode.Uri.parse(element))!;
+		}
+	}
+	return folder;
+}
+
+// Extension activated
+export async function activate(context: vscode.ExtensionContext) {
+	console.log('MOOS Language Server extension "client" is now active!');
+
 	const serverModule = context.asAbsolutePath(
 		path.join('dist', 'server', 'server.js')
 	);
 
-	// Debug options
-	const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
+	function createClient(folder: vscode.WorkspaceFolder, debugPort: number): LanguageClient {
+		console.log('Starting client for: ' + folder ? folder.uri.toString() : "null");
+		const debugOptions = { execArgv: ['--nolazy', `--inspect=${debugPort}`] };
+		const serverOptions: ServerOptions = {
+			run: { module: serverModule, transport: TransportKind.ipc },
+			debug: {
+				module: serverModule,
+				transport: TransportKind.ipc,
+				options: debugOptions
+			}
+		};
 
-	// If the extension is launched in debug mode then the debug server options are used
-	// Otherwise the run options are used
-	const serverOptions: ServerOptions = {
-		run: { module: serverModule, transport: TransportKind.ipc },
-		debug: {
-			module: serverModule,
-			transport: TransportKind.ipc,
-			options: debugOptions
+		const clientOptions: LanguageClientOptions = {
+			documentSelector: [
+				{ scheme: 'file', language: 'moos' },
+				{ scheme: 'file', language: 'ivp-behavior' }
+			],
+			synchronize: {
+				fileEvents: moosFileExtensionPatterns.map((pattern) => {
+					return vscode.workspace.createFileSystemWatcher(pattern);
+				})
+			},
+			workspaceFolder: folder,
+		};
+
+		return new LanguageClient(
+			'moosLanguageClient',
+			'MOOS-IvP LSP Client',
+			serverOptions,
+			clientOptions,
+			true
+		);
+	}
+
+	async function didOpenTextDocument(document: vscode.TextDocument) {
+		if ((document.languageId !== 'moos' && document.languageId !== 'ivp-behavior')
+			|| (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled')) {
+			console.log('Skipping client for workspace: ' + document.languageId);
+			return;
 		}
-	};
+		const uri = document.uri;
+		if (uri.scheme === 'untitled' && !defaultClient) {
 
-	const clientOptions: LanguageClientOptions = {
-		documentSelector: [
-			{ scheme: 'file', language: 'moos' },
-			{ scheme: 'file', language: 'ivp-behavior' }
-		],
-		// workspaceFolder: folder,
-		synchronize: {
-			fileEvents: [
-				vscode.workspace.createFileSystemWatcher('**/.moos'),
-				vscode.workspace.createFileSystemWatcher('**/.bhv'),
-				vscode.workspace.createFileSystemWatcher('**/.meta'),
-				vscode.workspace.createFileSystemWatcher('**/.def'),
-				vscode.workspace.createFileSystemWatcher('**/.plug'),
-			]
+			defaultClient = createClient(null, 6009);
+			defaultClient.start();
+			return;
 		}
-	};
+		let folder = vscode.workspace.getWorkspaceFolder(uri);
 
+		if (!folder) {
+			return;
+		}
+		folder = getTopWorkspace(folder);
 
-	client = new LanguageClient(
-		'moosLanguageClient',
-		'MOOS-IvP LSP Client',
-		serverOptions,
-		clientOptions,
-		true
-	);
+		if (!clients.has(folder.uri.toString())) {
+			const client = createClient(folder, 6011 + clients.size);
+			client.start();
 
-	client.onReady().then(() => {
-		console.log('Client ready');
+			// TODO: This is extremely slow..
+			await openMoosFilesInWorkspaceFolder(folder);
+
+			clients.set(folder.uri.toString(), client);
+		}
+	}
+
+	vscode.workspace.onDidOpenTextDocument(didOpenTextDocument);
+	vscode.workspace.textDocuments.forEach(didOpenTextDocument);
+	vscode.workspace.onDidChangeWorkspaceFolders((event) => {
+		for (const folder of event.removed) {
+			const client = clients.get(folder.uri.toString());
+			if (client) {
+				clients.delete(folder.uri.toString());
+				client.stop();
+			}
+		}
 	});
-
-
-
-	// Starting the client will also start the server
-	client.start();
-
-	console.log('Client started');
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {
-	if (!client) {
-		return undefined;
+// Extension deactivated - Stop all of the clients
+export function deactivate(): Thenable<void> {
+	const promises: Thenable<void>[] = [];
+	if (defaultClient) {
+		promises.push(defaultClient.stop());
 	}
-	return client.stop();
-
+	for (const client of clients.values()) {
+		if (client) {
+			promises.push(client.stop());
+		}
+	}
+	return Promise.all(promises).then(() => undefined);
 }
