@@ -27,6 +27,9 @@ import { languages, Range, SemanticTokensLegend } from 'vscode';
 import { MoosLanguageServer } from '../../ext/moos-language-server/pkg';
 import { resolveModulePath } from 'vscode-languageserver/lib/node/files';
 
+// TODO: Benchmark
+import { performance } from 'perf_hooks';
+
 // Connection to the client
 const connection = createConnection(ProposedFeatures.all);
 
@@ -35,7 +38,14 @@ const sendDiagnosticsCallback = (params: PublishDiagnosticsParams) =>
 
 
 const languageServer = new MoosLanguageServer(sendDiagnosticsCallback);
-connection.onNotification((...args) => languageServer.onNotification(...args));
+connection.onNotification((...args) => {
+	// TODO: Need to remove this benchmarking
+	var startTime = performance.now();
+	let result = languageServer.onNotification(...args);
+	var endTime = performance.now();
+	console.log(`onNotification took ${endTime - startTime} milliseconds`);
+	return result;
+});
 //connection.onRequest((...args) => languageServer.onRequest(...args));
 
 connection.onRequest(SemanticTokensRequest.type, (params) => languageServer.onSemanticTokensFull(params));
@@ -74,13 +84,15 @@ connection.onInitialize((params: InitializeParams) => {
 				save: false,
 				change: TextDocumentSyncKind.Full,
 			},
+                       // TODO: Uncomment when code completion is working
 			// Code Completion
-			completionProvider: {
-				resolveProvider: false
-			}
+			// completionProvider: {
+			// 	resolveProvider: true
+			// }
 		}
 	};
-	const tokenTypes = ['class', 'interface', 'enum', 'function', 'variable'];
+        // TODO: Need to get these from the Rust code
+	const tokenTypes = ['comment', 'keyword', 'class', 'interface', 'enum', 'function', 'variable'];
 	const tokenModifiers = ['declaration', 'documentation'];
 	result.capabilities.semanticTokensProvider = {
 		legend: {
