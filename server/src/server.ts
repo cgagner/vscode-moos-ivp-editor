@@ -84,16 +84,15 @@ connection.onInitialize((params: InitializeParams) => {
 				save: false,
 				change: TextDocumentSyncKind.Full,
 			},
-                       // TODO: Uncomment when code completion is working
+			// TODO: Uncomment when code completion is working
 			// Code Completion
 			// completionProvider: {
 			// 	resolveProvider: true
 			// }
 		}
 	};
-        // TODO: Need to get these from the Rust code
-	const tokenTypes = ['comment', 'keyword', 'class', 'interface', 'enum', 'function', 'variable'];
-	const tokenModifiers = ['declaration', 'documentation'];
+	const tokenTypes = MoosLanguageServer.getTokenTypes();
+	const tokenModifiers = MoosLanguageServer.getTokenModifiers();
 	result.capabilities.semanticTokensProvider = {
 		legend: {
 			tokenTypes: tokenTypes,
