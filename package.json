@@ -79,18 +79,7 @@
                 "configuration": "./language-configuration.json"
             }
         ],
-        "grammars": [
-            {
-                "language": "moos",
-                "scopeName": "source.moos",
-                "path": "./syntaxes/moos.tmLanguage.json"
-            },
-            {
-                "language": "ivp-behavior",
-                "scopeName": "source.bhv",
-                "path": "./syntaxes/bhv.tmLanguage.json"
-            }
-        ]
+        "grammars": []
     },
     "configurationDefaults": {
         "moos": {

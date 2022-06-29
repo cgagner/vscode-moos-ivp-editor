@@ -91,6 +91,10 @@ Initial release of the moos-ivp-editor extension for VS Code.
 cargo install wasm-pack
 ```
 
+```bash
+npm run compile
+```
+
 ## For more information
 
 * [MOOS-IvP Homepage](https://oceanai.mit.edu/moos-ivp)
