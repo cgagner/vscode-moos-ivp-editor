@@ -1,3 +1,3 @@
-[submodule "moos-language-server"]
-	path = ext/moos-language-server
-	url = ../moos-language-server.git
+[submodule "ext/moos-rs"]
+	path = ext/moos-rs
+	url = git@github.com:cgagner/moos-rs.git

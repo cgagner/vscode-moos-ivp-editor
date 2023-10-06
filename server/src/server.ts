@@ -24,7 +24,7 @@ import {
 } from 'vscode-languageserver-textdocument';
 import { languages, Range, SemanticTokensLegend } from 'vscode';
 
-import { MoosLanguageServer } from '../../ext/moos-language-server/pkg';
+import { MoosLanguageServer } from '../../ext/moos-rs/moos-language-server/pkg';
 import { resolveModulePath } from 'vscode-languageserver/lib/node/files';
 
 // TODO: Benchmark

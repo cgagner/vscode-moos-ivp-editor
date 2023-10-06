@@ -89,7 +89,7 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "package": "vsce package --no-yarn",
-        "compile": "(cd ext/moos-language-server && wasm-pack build --target nodejs) && tsc -b",
+        "compile": "(cd ext/moos-rs/moos-language-server && wasm-pack build --target nodejs) && tsc -b",
         "watch": "tsc -b -w",
         "lint": "eslint src --ext ts",
         "postinstall": "npm install ./server; npm install ./client"
