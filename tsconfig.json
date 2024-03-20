@@ -3,9 +3,13 @@
 		"composite": true,
 		"module": "commonjs",
 		"target": "es2021",
-		"lib": ["ES2021"],
+		"lib": [
+			"ES2021"
+		],
 		"outDir": "out",
-		"rootDirs": ["client/src", "server/src"],
+		"rootDirs": [
+			"client/src",
+		],
 		"sourceMap": true,
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
@@ -20,7 +24,8 @@
 		".vscode-test"
 	],
 	"references": [
-		{ "path": "./client" },
-		{ "path": "./server" }
-	  ]
+		{
+			"path": "./client"
+		},
+	]
 }

@@ -79,19 +79,28 @@ function getTopWorkspace(folder: vscode.WorkspaceFolder): vscode.WorkspaceFolder
 export async function activate(context: vscode.ExtensionContext) {
 	console.log('MOOS Language Server extension "client" is now active!');
 
-	const serverModule = context.asAbsolutePath(
-		path.join('dist', 'server', 'server.js')
+	const serverCommand = context.asAbsolutePath(
+		path.join('ext', 'moos-rs', 'target', 'debug', 'moos-ivp-language-server')
 	);
 
 	function createClient(folder: vscode.WorkspaceFolder, debugPort: number): LanguageClient {
 		console.log('Starting client for: ' + folder ? folder.uri.toString() : "null");
 		const debugOptions = { execArgv: ['--nolazy', `--inspect=${debugPort}`] };
+		//export interface Executable {
+		// 		command: string;
+		// 		args?: string[];
+		// 		options?: ExecutableOptions;
+		// }
+		// 	export interface ExecutableOptions {
+		// 		cwd?: string;
+		// 		env?: any;
+		// 		detached?: boolean;
+		// 		shell?: boolean;
+		// }
 		const serverOptions: ServerOptions = {
-			run: { module: serverModule, transport: TransportKind.ipc },
+			run: { command: serverCommand },
 			debug: {
-				module: serverModule,
-				transport: TransportKind.ipc,
-				options: debugOptions
+				command: serverCommand,
 			}
 		};
 
