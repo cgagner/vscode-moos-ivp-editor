@@ -1,20 +1,13 @@
 {
 	"compilerOptions": {
-		"composite": true,
 		"module": "commonjs",
-		"target": "es2021",
+		"target": "es2020",
 		"lib": [
-			"ES2021"
+			"es2020"
 		],
 		"outDir": "out",
-		"rootDirs": [
-			"client/src",
-		],
-		"sourceMap": true,
-		/* Additional Checks */
-		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
-		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
-		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+		"rootDir": "src",
+		"sourceMap": true
 	},
 	"include": [
 		"src"
