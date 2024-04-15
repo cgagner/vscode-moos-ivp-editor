@@ -1,109 +1,109 @@
 {
-    "name": "moos-ivp-editor",
-    "displayName": "MOOS-IvP Editor",
-    "publisher": "cgagner",
-    "description": "Syntax highlighting for MOOS-IvP configuration files.",
-    "version": "0.2.0",
-    "license": "MIT",
-    "repository": {
-        "url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"
-    },
-    "engines": {
-        "vscode": "^1.52.0"
-    },
-    "categories": [
-        "Programming Languages"
+  "name": "moos-ivp-editor",
+  "displayName": "MOOS-IvP Editor",
+  "publisher": "cgagner",
+  "description": "Syntax highlighting for MOOS-IvP configuration files.",
+  "version": "0.2.0",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/cgagner/vscode-moos-ivp-editor.git"
+  },
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/*.moos",
+    "workspaceContains:**/*.bhv",
+    "workspaceContains:**/*.plug",
+    "workspaceContains:**/*.def",
+    "workspaceContains:**/*.meta",
+    "onLanguage:moos",
+    "onLanguage:ivp-behavior",
+    "onCommand:client.helloWorld"
+  ],
+  "main": "./dist/client/client.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "client.helloWorld",
+        "title": "Hello World"
+      }
     ],
-    "activationEvents": [
-        "workspaceContains:**/*.moos",
-        "workspaceContains:**/*.bhv",
-        "workspaceContains:**/*.plug",
-        "workspaceContains:**/*.def",
-        "workspaceContains:**/*.meta",
-        "onLanguage:moos",
-        "onLanguage:ivp-behavior",
-        "onCommand:client.helloWorld"
-    ],
-    "main": "./dist/client/client.js",
-    "contributes": {
-        "commands": [
-            {
-                "command": "client.helloWorld",
-                "title": "Hello World"
+    "configuration": [
+      {
+        "title": "MOOS-IvP",
+        "properties": {
+          "moos-ivp.includePath": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "default": [],
+            "description": "Specifies a list of directories to look for include files when evaluating a mission file if the include file is not found in the current directory.",
+            "items": {
+              "type": "string"
             }
-        ],
-        "configuration": [
-            {
-                "title": "MOOS-IvP",
-                "properties": {
-                    "moos-ivp.includePath": {
-                        "type": [
-                            "array",
-                            "null"
-                        ],
-                        "default": [],
-                        "description": "Specifies a list of directories to look for include files when evaluating a mission file if the include file is not found in the current directory.",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        ],
-        "languages": [
-            {
-                "id": "moos",
-                "aliases": [
-                    "MOOS",
-                    "moos"
-                ],
-                "extensions": [
-                    ".moos",
-                    ".moos++",
-                    ".plug",
-                    ".meta",
-                    ".def"
-                ],
-                "configuration": "./language-configuration.json"
-            },
-            {
-                "id": "ivp-behavior",
-                "aliases": [
-                    "IvP Behavior",
-                    "ivp-behavior"
-                ],
-                "extensions": [
-                    ".bhv",
-                    ".bhv++"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": []
-    },
-    "configurationDefaults": {
-        "moos": {
-            "editor.semanticHighlighting.enabled": true
+          }
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "package": "vsce package --no-yarn",
-        "compile": "(cd ext/moos-rs/moos-ivp-language-server && cargo build) && tsc -b",
-        "watch": "tsc -b -w",
-        "lint": "eslint src --ext ts",
-        "postinstall": "npm install ./client"
-    },
-    "devDependencies": {
-        "@types/mocha": "^10.0.6",
-        "@types/node": "^18.14.6",
-        "@typescript-eslint/eslint-plugin": "^7.1.0",
-        "@typescript-eslint/parser": "^7.1.0",
-        "eslint": "^8.57.0",
-        "mocha": "^10.3.0",
-        "typescript": "^5.3.3"
-    },
-    "dependencies": {
-        "vscode-moos-ivp-client": "file:client"
+      }
+    ],
+    "languages": [
+      {
+        "id": "moos",
+        "aliases": [
+          "MOOS",
+          "moos"
+        ],
+        "extensions": [
+          ".moos",
+          ".moos++",
+          ".plug",
+          ".meta",
+          ".def"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "ivp-behavior",
+        "aliases": [
+          "IvP Behavior",
+          "ivp-behavior"
+        ],
+        "extensions": [
+          ".bhv",
+          ".bhv++"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": []
+  },
+  "configurationDefaults": {
+    "moos": {
+      "editor.semanticHighlighting.enabled": true
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package --no-yarn",
+    "compile": "(cd ext/moos-rs/moos-ivp-language-server && cargo build --release) && tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "eslint src --ext ts",
+    "postinstall": "npm install ./client"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^18.14.6",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "vscode-moos-ivp-client": "file:client"
+  }
 }

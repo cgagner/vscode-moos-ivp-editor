@@ -12,3 +12,6 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+ext/**
+!ext/moos-rs/target/debug/moos-ivp-language-server
+!ext/moos-rs/target/release/moos-ivp-language-server
