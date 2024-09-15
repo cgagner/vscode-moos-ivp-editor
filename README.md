@@ -108,7 +108,7 @@ npm install @vscode/vsce
 * [X] Update README.md to include instructions for packaging
 * [ ] VS Code package `vsix` file does not load correctly. Seems to be missing
       dependencies.
-* [ ] Figure out how to add 'Toggle Comment' shortcuts.
+* [X] Figure out how to add 'Toggle Comment' shortcuts.
 * [ ] Control-click should on include should be the same as 'Go To Definition'.
       Includes currently have an underline because they are links. They should
       probably be definitions.
