@@ -87,13 +87,33 @@ Initial release of the moos-ivp-editor extension for VS Code.
 
 #### Notes:
 
-```bash
-cargo install wasm-pack
-```
+Building:
 
 ```bash
+npm install
 npm run compile
 ```
+
+Packaging:
+
+```bash
+npm install
+npm install @vscode/vsce
+./node_modules/vsce/vsce package
+```
+
+
+## TODO
+
+* [X] Update README.md to include instructions for packaging
+* [ ] VS Code package `vsix` file does not load correctly. Seems to be missing
+      dependencies.
+* [ ] Figure out how to add 'Toggle Comment' shortcuts.
+* [ ] Control-click should on include should be the same as 'Go To Definition'.
+      Includes currently have an underline because they are links. They should
+      probably be definitions.
+
+
 
 ## For more information
 
