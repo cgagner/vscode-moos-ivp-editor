@@ -1,9 +1,6 @@
 .vscode/**
 .vscode-test/**
-out/**
-node_modules/**
 src/**
-client/**
 server/**
 .gitignore
 .yarnrc
@@ -15,3 +12,10 @@ vsc-extension-quickstart.md
 ext/**
 !ext/moos-rs/target/debug/moos-ivp-language-server
 !ext/moos-rs/target/release/moos-ivp-language-server
+client/node_modules/**
+!client/node_modules/vscode-jsonrpc/**
+!client/node_modules/vscode-languageclient/**
+!client/node_modules/vscode-languageserver-protocol/**
+!client/node_modules/vscode-languageserver-types/**
+!client/node_modules/{minimatch,brace-expansion,concat-map,balanced-match}/**
+!client/node_modules/{semver,lru-cache,yallist}/**

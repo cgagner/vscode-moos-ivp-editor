@@ -1,5 +1,8 @@
 /dist
 /out
 /node_modules
+/client/tsconfig.tsbuildinfo
+/client/out
+/client/node_modules
 .vscode-test/
 *.vsix

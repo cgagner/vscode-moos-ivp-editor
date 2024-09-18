@@ -112,6 +112,8 @@ npm install @vscode/vsce
 * [ ] Control-click should on include should be the same as 'Go To Definition'.
       Includes currently have an underline because they are links. They should
       probably be definitions.
+* [ ] Need to update client to look for release version of application and to
+      use the OS and ARCH.
 
 
 
